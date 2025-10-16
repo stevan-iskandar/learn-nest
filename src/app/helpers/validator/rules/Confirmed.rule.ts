@@ -1,6 +1,6 @@
 import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator"
 
-export const Confirmed = (field: string, validationOptions?: ValidationOptions) => {
+export function Confirmed(field: string, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'confirmed',

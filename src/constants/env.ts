@@ -1,3 +1,9 @@
+import { configDotenv } from "dotenv"
+
+configDotenv()
+
+type DBConnect = "postgres" | "mysql" | "mariadb" | "sqlite" | "oracle" | "mongodb"
+
 export default {
   appName: process.env.APP_NAME ?? 'Nest JS',
   appProtocol: process.env.APP_PROTOCOL ?? 'http',
@@ -6,11 +12,11 @@ export default {
   appHostPort: parseInt(process.env.APP_HOST_PORT ?? '3000'),
   appEnv: process.env.APP_ENV ?? 'development',
 
-  dbConnect: process.env.DB_CONNECTION ?? 'postgres',
+  dbConnect: (process.env.DB_CONNECTION ?? 'postgres') as DBConnect,
   dbHost: process.env.DB_HOST ?? 'localhost',
   dbPort: parseInt(process.env.DB_PORT ?? '5432'),
-  dbName: process.env.DB_NAME ?? 'postgres',
-  dbUser: process.env.DB_USER ?? 'postgres',
+  dbDatabase: process.env.DB_DATABASE ?? 'postgres',
+  dbUsername: process.env.DB_USERNAME ?? 'postgres',
   dbPassword: process.env.DB_PASSWORD ?? '',
 
   hashidsSalt: process.env.HASHIDS_SALT ?? 'mySecretSalt',

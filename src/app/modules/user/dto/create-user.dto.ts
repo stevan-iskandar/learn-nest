@@ -1,3 +1,4 @@
+import { TransformNumber } from "@/app/helpers/transformer/TransformNumber.transformer"
 import { Confirmed, Email, Required } from "@/app/helpers/validator/rules"
 import { IsNumber } from "class-validator"
 
@@ -6,6 +7,7 @@ export class CreateUserDto {
   name: string
 
   @Required()
+  @TransformNumber()
   @IsNumber()
   age: number
 

@@ -1,6 +1,6 @@
 import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator"
 
-export const Required = (validationOptions?: ValidationOptions) => {
+export function Required(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'required',

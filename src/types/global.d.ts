@@ -10,8 +10,8 @@ namespace NodeJS {
     DB_CONNECTION?: string
     DB_HOST?: string
     DB_PORT?: string
-    DB_NAME?: string
-    DB_USER?: string
+    DB_DATABASE?: string
+    DB_USERNAME?: string
     DB_PASSWORD?: string
 
     HASHIDS_SALT?: string

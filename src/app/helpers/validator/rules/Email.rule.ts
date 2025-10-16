@@ -1,7 +1,7 @@
 import { isEmail, registerDecorator, ValidationArguments, ValidationOptions } from "class-validator"
 import { IsEmailOptions } from "validator"
 
-export const Email = (options?: IsEmailOptions, validationOptions?: ValidationOptions) => {
+export function Email(options?: IsEmailOptions, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'email',
