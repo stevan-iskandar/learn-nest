@@ -7,14 +7,16 @@ import { Repository } from "typeorm"
 export class FetchUserService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
   ) { }
 
-  findAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.usersRepository.find()
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id })
+  async findOne(id: number): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: { id },
+    })
   }
 }

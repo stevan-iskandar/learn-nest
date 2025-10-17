@@ -4,12 +4,10 @@ import { IsNumber } from "class-validator"
 
 export class CreateUserDto {
   @Required()
-  name: string
+  first_name: string
 
   @Required()
-  @TransformNumber()
-  @IsNumber()
-  age: number
+  last_name: string
 
   @Required()
   @Email({
