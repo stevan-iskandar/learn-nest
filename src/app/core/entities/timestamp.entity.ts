@@ -1,7 +1,7 @@
 import { BlankEntity } from "./blank.entity"
 import { User } from "@/app/domain/system/user/entities/user.entity"
 import { Expose } from "class-transformer"
-import { Column, ManyToOne } from "typeorm"
+import { Column, CreateDateColumn, ManyToOne, UpdateDateColumn } from "typeorm"
 
 export const timestampColumn = {
   created_by_id: 'created_by_id',
@@ -16,6 +16,7 @@ export function WithTimestamp<T extends new (...args: any[]) => {}>(Base = Blank
     @Column({
       type: 'bigint',
       nullable: true,
+      unsigned: true,
     })
     created_by_id?: number
 
@@ -27,6 +28,7 @@ export function WithTimestamp<T extends new (...args: any[]) => {}>(Base = Blank
     @Column({
       type: 'bigint',
       nullable: true,
+      unsigned: true,
     })
     updated_by_id?: number
 
@@ -35,13 +37,13 @@ export function WithTimestamp<T extends new (...args: any[]) => {}>(Base = Blank
     updated_by?: User
 
     @Expose()
-    @Column({
+    @CreateDateColumn({
       type: 'timestamptz',
     })
     created_at: Date
 
     @Expose()
-    @Column({
+    @UpdateDateColumn({
       type: 'timestamptz',
     })
     updated_at: Date

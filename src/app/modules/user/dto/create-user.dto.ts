@@ -11,7 +11,7 @@ export class CreateUserDto {
 
   @Required()
   @Email({
-    host_blacklist: ['email.com'],
+    host_blacklist: ['emaill.com'],
   })
   email: string
 

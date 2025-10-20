@@ -9,10 +9,10 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    if (typeof createUserDto.age !== 'number') throw new HttpException(
-      'age is not typeof number',
-      HttpStatus.UNPROCESSABLE_ENTITY,
-    )
+    // if (typeof createUserDto.age !== 'number') throw new HttpException(
+    //   'age is not typeof number',
+    //   HttpStatus.UNPROCESSABLE_ENTITY,
+    // )
     return this.userService.create(createUserDto)
   }
 

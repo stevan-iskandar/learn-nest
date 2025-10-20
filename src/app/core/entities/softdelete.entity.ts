@@ -1,6 +1,6 @@
 import { BlankEntity } from "./blank.entity"
 import { Expose } from "class-transformer"
-import { Column } from "typeorm"
+import { DeleteDateColumn } from "typeorm"
 
 export const softDeleteColumn = {
   deleted_at: 'deleted_at',
@@ -9,7 +9,7 @@ export const softDeleteColumn = {
 export function WithSoftDelete<T extends new (...args: any[]) => {}>(Base = BlankEntity as T) {
   abstract class SoftDeleteMixin extends Base {
     @Expose()
-    @Column({
+    @DeleteDateColumn({
       type: 'timestamptz',
       nullable: true,
     })

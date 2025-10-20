@@ -14,7 +14,7 @@ export const userColumn = {
   ...softDeleteColumn,
 }
 
-@Entity()
+@Entity(userTable)
 export class User extends WithSoftDelete(WithTimestamp(WithId())) {
   @Expose()
   @Column()

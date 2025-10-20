@@ -1,18 +1,4 @@
-import env from "@/constants/env"
+import { dataSourceOptions } from "./database-source.config"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import path from "path"
 
-const isDevelopment = env.appEnv === 'development'
-export const database = TypeOrmModule.forRoot({
-  type: env.dbConnect,
-  host: env.dbHost,
-  port: env.dbPort,
-  username: env.dbUsername,
-  password: env.dbPassword,
-  database: env.dbDatabase,
-  entities: [
-    path.join(__dirname, './../app/domain/**/*.entity.ts'),
-  ],
-  logging: isDevelopment,
-  // synchronize: isDevelopment,
-})
+export const database = TypeOrmModule.forRoot(dataSourceOptions)

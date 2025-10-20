@@ -11,8 +11,10 @@ export class CreateUserTable1760667945502 implements MigrationInterface {
                 {
                     name: userColumn.id,
                     type: columnType.bigInt,
-                    isPrimary: true,
                     unsigned: true,
+                    isPrimary: true,
+                    isGenerated: true,
+                    generationStrategy: 'increment',
                 },
                 {
                     name: userColumn.first_name,
@@ -40,10 +42,12 @@ export class CreateUserTable1760667945502 implements MigrationInterface {
                 {
                     name: userColumn.created_at,
                     type: columnType.datetime,
+                    default: 'now()',
                 },
                 {
                     name: userColumn.updated_at,
                     type: columnType.datetime,
+                    default: 'now()',
                 },
                 {
                     name: userColumn.deleted_at,

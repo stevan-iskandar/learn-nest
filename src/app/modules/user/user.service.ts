@@ -1,11 +1,31 @@
 import { CreateUserDto } from "./dto/create-user.dto"
 import { UpdateUserDto } from "./dto/update-user.dto"
+import { ModifyUserService } from "@/app/domain/system/user/repositories/modify-user.repository"
 import { Injectable } from "@nestjs/common"
+import { DataSource } from "typeorm"
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user'
+  constructor(
+    private readonly modifyUserService: ModifyUserService,
+    private readonly dataSource: DataSource,
+  ) { }
+
+  async create(createUserDto: CreateUserDto) {
+    const queryRunner = this.dataSource.createQueryRunner()
+
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
+    try {
+      await this.modifyUserService.store(createUserDto, queryRunner)
+
+      await queryRunner.commitTransaction()
+    } catch (err) {
+      await queryRunner.rollbackTransaction()
+      throw err
+    } finally {
+      await queryRunner.release()
+    }
   }
 
   findAll() {
