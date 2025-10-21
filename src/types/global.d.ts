@@ -14,6 +14,8 @@ namespace NodeJS {
     DB_USERNAME?: string
     DB_PASSWORD?: string
 
+    BCRYPT_ROUND?: string
+
     HASHIDS_SALT?: string
     HASHIDS_LENGTH?: string
   }

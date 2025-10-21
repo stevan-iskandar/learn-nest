@@ -9,6 +9,9 @@ export const userColumn = {
   ...idColumn,
   first_name: 'first_name',
   last_name: 'last_name',
+  email: 'email',
+  password: 'password',
+  age: 'age',
   active: 'active',
   ...timestampColumn,
   ...softDeleteColumn,
@@ -23,6 +26,18 @@ export class User extends WithSoftDelete(WithTimestamp(WithId())) {
   @Expose()
   @Column()
   last_name: string
+
+  @Expose()
+  @Column()
+  email: string
+
+  @Expose()
+  @Column()
+  password: string
+
+  @Expose()
+  @Column()
+  age: number
 
   @Expose()
   @Column({ default: true })

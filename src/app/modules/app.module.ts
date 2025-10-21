@@ -1,13 +1,15 @@
 import { LoggerMiddleware } from "../middleware/logger.middleware"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
-import { UserModule } from "./user/user.module"
+import { UserModule } from "./system/user/user.module"
 import { database } from "@/config/database.config"
+import { envConfig } from "@/constants/env"
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common"
 import { DataSource } from "typeorm"
 
 @Module({
   imports: [
+    envConfig,
     database,
     UserModule,
   ],

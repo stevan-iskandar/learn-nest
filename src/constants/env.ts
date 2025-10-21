@@ -1,6 +1,9 @@
-import { configDotenv } from "dotenv"
+import { ConfigModule } from "@nestjs/config"
 
-configDotenv()
+export const envConfig = ConfigModule.forRoot({
+  envFilePath: ['.env.development', '.env.production', '.env'],
+  isGlobal: true,
+})
 
 type DBConnect = "postgres" | "mysql" | "mariadb" | "sqlite" | "oracle" | "mongodb"
 
@@ -18,6 +21,8 @@ export default {
   dbDatabase: process.env.DB_DATABASE ?? 'postgres',
   dbUsername: process.env.DB_USERNAME ?? 'postgres',
   dbPassword: process.env.DB_PASSWORD ?? '',
+
+  bcryptRound: parseInt(process.env.BCRYPT_ROUND ?? '12'),
 
   hashidsSalt: process.env.HASHIDS_SALT ?? 'mySecretSalt',
   hashidsLength: parseInt(process.env.HASHIDS_LENGTH ?? '8'),

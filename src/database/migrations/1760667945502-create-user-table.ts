@@ -25,6 +25,18 @@ export class CreateUserTable1760667945502 implements MigrationInterface {
                     type: columnType.varchar,
                 },
                 {
+                    name: userColumn.email,
+                    type: columnType.varchar,
+                },
+                {
+                    name: userColumn.password,
+                    type: columnType.varchar,
+                },
+                {
+                    name: userColumn.age,
+                    type: columnType.int,
+                },
+                {
                     name: userColumn.active,
                     type: columnType.boolean,
                     default: true,

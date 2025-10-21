@@ -18,6 +18,12 @@ export function WithId<T extends new (...args: any[]) => {}>(Base = BlankEntity 
     id: number
 
     @AfterLoad()
+    convertIdToNumber() {
+      if (this.id && typeof this.id === 'string')
+        this.id = parseInt(this.id, 10)
+    }
+
+    @AfterLoad()
     encodeValue() {
       this[idColumn.encryption_id] = hashidsHelper.encode(this.id)
     }

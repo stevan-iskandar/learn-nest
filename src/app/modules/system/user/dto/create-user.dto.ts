@@ -16,12 +16,14 @@ export class CreateUserDto {
   email: string
 
   @Required()
-  phone: string
-
-  @Required()
   @Confirmed('password_confirmation')
   password: string
 
   @Required()
   password_confirmation: string
+
+  @Required()
+  @TransformNumber()
+  @IsNumber()
+  age: number
 }

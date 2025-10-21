@@ -1,10 +1,10 @@
 import { User } from "../entities/user.entity"
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { EntityNotFoundError, FindOptionsWhere, Repository } from "typeorm"
 
 @Injectable()
-export class FetchUserService {
+export class FetchUserRepository {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
@@ -14,9 +14,12 @@ export class FetchUserService {
     return this.usersRepository.find()
   }
 
-  async findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOne({
-      where: { id },
-    })
+  async findById(id: number): Promise<User> {
+    const where: FindOptionsWhere<User> = { id }
+    const result = await this.usersRepository.findOne({ where })
+
+    if (!result) throw new EntityNotFoundError(User, where)
+
+    return result
   }
 }
