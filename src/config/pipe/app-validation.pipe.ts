@@ -11,18 +11,42 @@ export class AppValidationPipe extends ValidationPipe {
   }
 
   createExceptionFactory(): (validationErrors?: ValidationError[]) => unknown {
+    const parseErrorMessage = (error: ValidationError) => {
+      const { property, children, constraints, contexts, target, value } = error
+
+      const parseErrorType = (type: string) => {
+        if (!constraints) return
+
+        switch (type) {
+          case 'isNotEmpty':
+            return `The ${property} field is required.`
+          case 'isEmail':
+            return `The ${property} must be a valid email address.`
+          default:
+            return constraints[type]
+        }
+      }
+
+      return constraints
+        ? Object.keys(constraints).map(type => parseErrorType(type)).reverse()
+        : []
+    }
+
     return validationErrors => {
-      const result = {}
+      const result = validationErrors?.reduce((result, error) => {
+        const process = (error: ValidationError, path: string = '') => {
+          const currentPath = path ? `${path}.${error.property}` : error.property
 
-      validationErrors?.forEach(error => {
-        const { property, constraints, children } = error
+          if (error.constraints) {
+            result[currentPath] = parseErrorMessage(error)
+          }
 
-        if (constraints) result[property] = Object.values(constraints).reverse()
+          error.children?.forEach(child => process(child, currentPath))
+        }
 
-        children?.length && children.forEach(child => {
-          if (child.constraints) result[`${property}.${child.property}`] = Object.values(child.constraints).reverse()
-        })
-      })
+        process(error)
+        return result
+      }, {}) || {}
 
       return new UnprocessableEntityException({
         message: 'Validation failed',

@@ -1,28 +1,30 @@
+import { User } from "@/app/domain/system/user/entities/user.entity"
 import { TransformNumber } from "@/app/helpers/transformer/TransformNumber.transformer"
-import { Confirmed, Email, Required } from "@/app/helpers/validator/rules"
-import { IsNumber } from "class-validator"
+import { Confirmed, Unique } from "@/app/helpers/validator/rules"
+import { IsEmail, IsNotEmpty, IsNumber } from "class-validator"
 
 export class CreateUserDto {
-  @Required()
+  @IsNotEmpty()
+  @Unique(User, 'first_name')
   first_name: string
 
-  @Required()
+  @IsNotEmpty()
   last_name: string
 
-  @Required()
-  @Email({
+  @IsNotEmpty()
+  @IsEmail({
     host_blacklist: ['emaill.com'],
   })
   email: string
 
-  @Required()
+  @IsNotEmpty()
   @Confirmed('password_confirmation')
   password: string
 
-  @Required()
+  @IsNotEmpty()
   password_confirmation: string
 
-  @Required()
+  @IsNotEmpty()
   @TransformNumber()
   @IsNumber()
   age: number
