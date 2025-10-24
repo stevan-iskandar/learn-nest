@@ -1,14 +1,22 @@
+import { RequestContext } from "@/app/context/request.context"
 import databaseSourceConfig from "@/config/database-source.config"
 import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator"
-import { EntityTarget, FindOptionsWhere, ILike, ObjectLiteral } from "typeorm"
+import { EntityTarget, FindOptionsWhere, ILike, Not, ObjectLiteral } from "typeorm"
+import hashidsHelper from "../../hashids.helper"
 
-export function Unique<Entity extends ObjectLiteral>(entity: EntityTarget<Entity>, column: keyof Entity, validationOptions?: ValidationOptions) {
+interface UniqueOptions {
+  excludeSelf?: boolean
+  params?: string
+  isHashId?: boolean
+}
+
+export function Unique<Entity extends ObjectLiteral>(entity: EntityTarget<Entity>, column: keyof Entity, options?: UniqueOptions, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'unique',
       target: object.constructor,
       propertyName: propertyName,
-      constraints: [entity, column],
+      constraints: [entity, column, options],
       options: validationOptions,
       async: true,
       validator: {
@@ -16,10 +24,22 @@ export function Unique<Entity extends ObjectLiteral>(entity: EntityTarget<Entity
           try {
             const entity: EntityTarget<Entity> = args.constraints[0]
             const column: keyof Entity = args.constraints[1]
+            const options: UniqueOptions | undefined = args.constraints[2]
+            const where = {
+              [column]: ILike(value),
+            } as FindOptionsWhere<Entity>
+
+            if (options?.excludeSelf) {
+              const req = RequestContext.getCurrentRequest()
+              const paramsId = req!.params[options.params ?? 'id']
+              const value = options.isHashId === false
+                ? parseInt(paramsId)
+                : hashidsHelper.decode(paramsId)
+                ; (where as any).id = Not(value)
+            }
+
             const data = await databaseSourceConfig.getRepository(entity).findOne({
-              where: {
-                [column]: ILike(value),
-              } as FindOptionsWhere<Entity>,
+              where,
               withDeleted: true,
             })
 

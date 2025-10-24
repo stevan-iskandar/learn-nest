@@ -1,3 +1,4 @@
+import { RequestContext } from "./app/context/request.context"
 import { LoggerMiddleware } from "./app/middleware/logger.middleware"
 import { AppModule } from "./app/modules/app.module"
 import databaseSourceConfig from "./config/database-source.config"
@@ -10,6 +11,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
   await databaseSourceConfig.initialize()
+  app.use((req, res, next) => {
+    RequestContext.setCurrentRequest(req)
+    next()
+  })
   app.use(new LoggerMiddleware().use)
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
   app.useGlobalPipes(new AppValidationPipe)

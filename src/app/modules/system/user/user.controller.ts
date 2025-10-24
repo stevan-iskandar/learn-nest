@@ -1,7 +1,8 @@
+import { UserService } from "@/app/domain/system/user/services/user.service"
+import hashidsHelper from "@/app/helpers/hashids.helper"
 import { CreateUserDto } from "@/app/modules/system/user/dto/create-user.dto"
 import { UpdateUserDto } from "@/app/modules/system/user/dto/update-user.dto"
-import { UserService } from "@/app/domain/system/user/services/user.service"
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common"
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common"
 
 const auth_id = 1
 @Controller('user')
@@ -14,8 +15,8 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(id)
+  findOne(@Param('id') id: string) {
+    return this.userService.findOne(hashidsHelper.decode(id))
   }
 
   @Post()
@@ -24,12 +25,12 @@ export class UserController {
   }
 
   @Put(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, { ...updateUserDto, auth_id })
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(hashidsHelper.decode(id), { ...updateUserDto, auth_id })
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.remove(id)
+  remove(@Param('id') id: string) {
+    return this.userService.remove(hashidsHelper.decode(id))
   }
 }
