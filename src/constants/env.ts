@@ -24,6 +24,8 @@ export default {
 
   bcryptRound: parseInt(process.env.BCRYPT_ROUND ?? '12'),
 
+  jwtSecret: process.env.JWT_SECRET ?? 'mySecretKey',
+
   hashidsSalt: process.env.HASHIDS_SALT ?? 'mySecretSalt',
   hashidsLength: parseInt(process.env.HASHIDS_LENGTH ?? '8'),
 }

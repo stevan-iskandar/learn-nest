@@ -1,7 +1,7 @@
 import { BlankEntity } from "./blank.entity"
 import hashidsHelper from "@/app/helpers/hashids.helper"
 import { Expose } from "class-transformer"
-import { AfterLoad, PrimaryGeneratedColumn } from "typeorm"
+import { AfterInsert, AfterLoad, AfterUpdate, PrimaryGeneratedColumn } from "typeorm"
 
 export const idColumn = {
   id: 'id',
@@ -18,13 +18,17 @@ export function WithId<T extends new (...args: any[]) => {}>(Base = BlankEntity 
     id: number
 
     @AfterLoad()
+    @AfterInsert()
+    @AfterUpdate()
     convertIdToNumber() {
       if (this.id && typeof this.id === 'string')
         this.id = parseInt(this.id, 10)
     }
 
     @AfterLoad()
-    encodeValue() {
+    @AfterInsert()
+    @AfterUpdate()
+    encryptId() {
       this[idColumn.encryption_id] = hashidsHelper.encode(this.id)
     }
   }

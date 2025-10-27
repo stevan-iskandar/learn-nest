@@ -1,7 +1,7 @@
 import { idColumn, WithId } from "@/app/core/entities/id.entity"
 import { softDeleteColumn, WithSoftDelete } from "@/app/core/entities/softdelete.entity"
 import { timestampColumn, WithTimestamp } from "@/app/core/entities/timestamp.entity"
-import { Expose } from "class-transformer"
+import { Exclude, Expose } from "class-transformer"
 import { Column, Entity } from "typeorm"
 
 export const userTable = 'users'
@@ -9,6 +9,7 @@ export const userColumn = {
   ...idColumn,
   first_name: 'first_name',
   last_name: 'last_name',
+  username: 'username',
   email: 'email',
   password: 'password',
   age: 'age',
@@ -29,9 +30,13 @@ export class User extends WithSoftDelete(WithTimestamp(WithId())) {
 
   @Expose()
   @Column()
-  email: string
+  username: string
 
   @Expose()
+  @Column()
+  email: string
+
+  @Exclude({ toPlainOnly: true })
   @Column()
   password: string
 

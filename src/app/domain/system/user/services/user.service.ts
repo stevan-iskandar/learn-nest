@@ -7,6 +7,7 @@ import { DataSource, QueryRunner } from "typeorm"
 interface UserStore {
   first_name: string
   last_name: string
+  username: string
   email: string
   password: string
   age: number
@@ -16,6 +17,7 @@ interface UserStore {
 interface UserUpdate {
   first_name?: string
   last_name?: string
+  username?: string
   email?: string
   age?: number
   auth_id: number
@@ -35,8 +37,12 @@ export class UserService extends BaseService {
     return this.fetchUserRepository.findAll()
   }
 
-  async findOne(id: number) {
+  async findById(id: number) {
     return this.fetchUserRepository.findById(id)
+  }
+
+  async findByUsername(username: string) {
+    return this.fetchUserRepository.findByUsername(username)
   }
 
   async create(data: UserStore, queryRunner?: QueryRunner) {

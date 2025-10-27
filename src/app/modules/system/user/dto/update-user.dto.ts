@@ -9,6 +9,10 @@ export class UpdateUserDto extends OmitType(CreateUserDto, [
   'password_confirmation',
 ]) {
   @IsNotEmpty()
-  @Unique(User, 'first_name', { excludeSelf: true })
-  first_name: string
+  @Unique(User, 'username', { excludeSelf: true })
+  username: string
+  @IsNotEmpty()
+
+  @Unique(User, 'email', { excludeSelf: true })
+  email: string
 }

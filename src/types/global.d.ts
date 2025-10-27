@@ -16,6 +16,8 @@ namespace NodeJS {
 
     BCRYPT_ROUND?: string
 
+    JWT_SECRET?: string
+
     HASHIDS_SALT?: string
     HASHIDS_LENGTH?: string
   }

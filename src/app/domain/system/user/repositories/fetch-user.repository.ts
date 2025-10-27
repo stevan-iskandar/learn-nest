@@ -22,4 +22,13 @@ export class FetchUserRepository {
 
     return result
   }
+
+  async findByUsername(username: string): Promise<User> {
+    const where: FindOptionsWhere<User> = { username: username.toUpperCase() }
+    const result = await this.usersRepository.findOne({ where })
+
+    if (!result) throw new EntityNotFoundError(User, where)
+
+    return result
+  }
 }

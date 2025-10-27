@@ -8,6 +8,7 @@ import { FindOptionsWhere, QueryRunner, Repository } from "typeorm"
 interface UserStore {
   first_name: string
   last_name: string
+  username: string
   email: string
   password: string
   age: number
@@ -17,6 +18,7 @@ interface UserStore {
 interface UserUpdate {
   first_name?: string
   last_name?: string
+  username?: string
   email?: string
   age?: number
   auth_id: number
@@ -30,9 +32,10 @@ export class ModifyUserRepository {
     private readonly fetchUserRepository: FetchUserRepository
   ) { }
 
-  async store({ password, auth_id, ...data }: UserStore, queryRunner?: QueryRunner): Promise<User> {
+  async store({ username, password, auth_id, ...data }: UserStore, queryRunner?: QueryRunner): Promise<User> {
     const user = this.userRepository.create({
       ...data,
+      username: username.toUpperCase(),
       password: hashStringHelper(password),
       created_by_id: auth_id,
       updated_by_id: auth_id,
@@ -50,6 +53,8 @@ export class ModifyUserRepository {
       user.first_name = data.first_name
     if (data.last_name !== undefined)
       user.last_name = data.last_name
+    if (data.username !== undefined)
+      user.username = data.username.toUpperCase()
     if (data.email !== undefined)
       user.email = data.email
     if (data.age !== undefined)

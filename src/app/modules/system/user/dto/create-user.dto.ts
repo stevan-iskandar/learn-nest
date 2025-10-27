@@ -5,13 +5,17 @@ import { IsEmail, IsNotEmpty, IsNumber } from "class-validator"
 
 export class CreateUserDto {
   @IsNotEmpty()
-  @Unique(User, 'first_name')
   first_name: string
 
   @IsNotEmpty()
   last_name: string
 
   @IsNotEmpty()
+  @Unique(User, 'username')
+  username: string
+
+  @IsNotEmpty()
+  @Unique(User, 'email')
   @IsEmail({
     host_blacklist: ['emaill.com'],
   })

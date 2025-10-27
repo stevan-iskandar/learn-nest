@@ -1,6 +1,7 @@
 import { LoggerMiddleware } from "../middleware/logger.middleware"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
+import { AuthModule } from "./auth/auth.module"
 import { UserModule } from "./system/user/user.module"
 import { database } from "@/config/database.config"
 import { envConfig } from "@/constants/env"
@@ -11,6 +12,7 @@ import { DataSource } from "typeorm"
   imports: [
     envConfig,
     database,
+    AuthModule,
     UserModule,
   ],
   controllers: [AppController],

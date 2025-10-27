@@ -16,7 +16,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(hashidsHelper.decode(id))
+    return this.userService.findById(hashidsHelper.decode(id))
   }
 
   @Post()
