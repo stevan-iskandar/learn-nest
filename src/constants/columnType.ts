@@ -26,4 +26,5 @@ export default {
   varchar: 'varchar',
   boolean: 'boolean',
   datetime: datetime(),
+  json: 'json',
 }

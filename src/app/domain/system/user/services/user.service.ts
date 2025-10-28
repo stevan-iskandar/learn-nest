@@ -57,7 +57,7 @@ export class UserService extends BaseService {
     }, queryRunner)
   }
 
-  async remove(id: number, queryRunner?: QueryRunner) {
+  async delete(id: number, queryRunner?: QueryRunner) {
     return this.executeInTransaction(async queryRunner => {
       return this.modifyUserRepository.delete(id, queryRunner)
     }, queryRunner)

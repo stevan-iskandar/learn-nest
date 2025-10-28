@@ -31,6 +31,6 @@ export class UserController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(hashidsHelper.decode(id))
+    return this.userService.delete(hashidsHelper.decode(id))
   }
 }

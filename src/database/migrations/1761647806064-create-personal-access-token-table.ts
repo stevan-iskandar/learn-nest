@@ -1,15 +1,15 @@
-import { userColumn, userTable } from "@/app/domain/system/user/entities/user.entity"
+import { personalAccessTokenColumn, personalAccessTokenTable } from "@/app/domain/system/personal-access-token/entities/personal-access-token.entity"
 import columnType from "@/constants/columnType"
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class CreateUserTable1760667945502 implements MigrationInterface {
+export class CreatePersonalAccessTokenTable1761647806064 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: userTable,
+            name: personalAccessTokenTable,
             columns: [
                 {
-                    name: userColumn.id,
+                    name: personalAccessTokenColumn.id,
                     type: columnType.bigInt,
                     unsigned: true,
                     isPrimary: true,
@@ -17,68 +17,59 @@ export class CreateUserTable1760667945502 implements MigrationInterface {
                     generationStrategy: 'increment',
                 },
                 {
-                    name: userColumn.first_name,
+                    name: personalAccessTokenColumn.user_id,
+                    type: columnType.bigInt,
+                    unsigned: true,
+                },
+                {
+                    name: personalAccessTokenColumn.name,
                     type: columnType.varchar,
                 },
                 {
-                    name: userColumn.last_name,
+                    name: personalAccessTokenColumn.token,
                     type: columnType.varchar,
                 },
                 {
-                    name: userColumn.username,
-                    type: columnType.varchar,
-                    isUnique: true,
+                    name: personalAccessTokenColumn.abilities,
+                    type: columnType.json,
                 },
                 {
-                    name: userColumn.email,
-                    type: columnType.varchar,
+                    name: personalAccessTokenColumn.last_used_at,
+                    type: columnType.datetime,
+                    isNullable: true,
                 },
                 {
-                    name: userColumn.password,
-                    type: columnType.varchar,
+                    name: personalAccessTokenColumn.expired_at,
+                    type: columnType.datetime,
                 },
                 {
-                    name: userColumn.age,
-                    type: columnType.int,
-                },
-                {
-                    name: userColumn.active,
-                    type: columnType.boolean,
-                    default: true,
-                },
-                {
-                    name: userColumn.created_by_id,
+                    name: personalAccessTokenColumn.created_by_id,
                     type: columnType.boolean,
                     isNullable: true,
                     unsigned: true,
                 },
                 {
-                    name: userColumn.updated_by_id,
+                    name: personalAccessTokenColumn.updated_by_id,
                     type: columnType.boolean,
                     isNullable: true,
                     unsigned: true,
                 },
                 {
-                    name: userColumn.created_at,
+                    name: personalAccessTokenColumn.created_at,
                     type: columnType.datetime,
                     default: 'now()',
                 },
                 {
-                    name: userColumn.updated_at,
+                    name: personalAccessTokenColumn.updated_at,
                     type: columnType.datetime,
                     default: 'now()',
-                },
-                {
-                    name: userColumn.deleted_at,
-                    type: columnType.datetime,
-                    isNullable: true,
                 },
             ],
         }), true)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable(userTable)
+        await queryRunner.dropTable(personalAccessTokenTable)
     }
 
 }
