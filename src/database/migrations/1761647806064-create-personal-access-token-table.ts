@@ -44,13 +44,13 @@ export class CreatePersonalAccessTokenTable1761647806064 implements MigrationInt
                 },
                 {
                     name: personalAccessTokenColumn.created_by_id,
-                    type: columnType.boolean,
+                    type: columnType.bigInt,
                     isNullable: true,
                     unsigned: true,
                 },
                 {
                     name: personalAccessTokenColumn.updated_by_id,
-                    type: columnType.boolean,
+                    type: columnType.bigInt,
                     isNullable: true,
                     unsigned: true,
                 },

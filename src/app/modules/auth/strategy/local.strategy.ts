@@ -12,12 +12,16 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(username: string, password: string): Promise<User | undefined> {
-    const user = await this.userService.findByUsername(username)
-    const validate = bcrypt.compareSync(password, user.password)
+    try {
+      const user = await this.userService.findByUsername(username)
+      const validate = bcrypt.compareSync(password, user.password)
 
-    if (!validate) {
+      if (!validate) throw new UnauthorizedException
+
+      return user
+    } catch (error) {
+      console.log(error)
       throw new UnauthorizedException
     }
-    return user
   }
 }

@@ -1,9 +1,10 @@
+import { PersonalAccessToken } from "../entities/personal-access-token.entity"
 import { FetchPersonalAccessTokenRepository } from "../repositories/fetch-personal-access-token.repository"
 import { ModifyPersonalAccessTokenRepository } from "../repositories/modify-personal-access-token.repository"
 import { BaseService } from "@/app/core/services/base.sefvice"
 import { Injectable } from "@nestjs/common"
 import { Dayjs } from "dayjs"
-import { DataSource, QueryRunner } from "typeorm"
+import { DataSource, FindOptionsRelations, QueryRunner } from "typeorm"
 
 interface PersonalAccessTokenStore {
   user_id: number
@@ -23,8 +24,8 @@ export class PersonalAccessTokenService extends BaseService {
     super(dataSource)
   }
 
-  async findById(id: number) {
-    return this.fetchPersonalAccessTokenRepository.findById(id)
+  async findById(id: number, relations?: FindOptionsRelations<PersonalAccessToken>) {
+    return this.fetchPersonalAccessTokenRepository.findById(id, relations)
   }
 
   async create(data: PersonalAccessTokenStore, queryRunner?: QueryRunner) {

@@ -1,15 +1,15 @@
-import env from "@/constants/env"
+import { PersonalAccessTokenService } from "../domain/system/personal-access-token/services/personal-access-token.service"
+import cryptoHelper from "../helpers/crypto.helper"
 import { IS_PUBLIC_KEY } from "@/decorators/auth.decorator"
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common"
 import { Reflector } from "@nestjs/core"
-import { JwtService } from "@nestjs/jwt"
 import { Request } from "express"
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
-    private reflector: Reflector,
+    private readonly reflector: Reflector,
+    private readonly personalAccessTokenService: PersonalAccessTokenService,
   ) { }
 
   private extractTokenFromHeader(request: Request): string | undefined {
@@ -22,26 +22,24 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ])
-    if (isPublic) {
-      // 💡 See this condition
-      return true
-    }
+
+    if (isPublic) return true
 
     const request = context.switchToHttp().getRequest()
     const token = this.extractTokenFromHeader(request)
-    if (!token) {
-      throw new UnauthorizedException
-    }
-    try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: env.jwtSecret,
-      })
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
-      request['user'] = payload
-    } catch {
-      throw new UnauthorizedException
-    }
+
+    if (!token) throw new UnauthorizedException
+
+    const [personalAccessTokenId, TokenAPI] = token.split('|')
+    const personalAccessToken = await this.personalAccessTokenService.findById(+personalAccessTokenId, {
+      user: true,
+    })
+
+    if (!cryptoHelper.verify(TokenAPI, personalAccessToken.token)) throw new UnauthorizedException
+    if (!personalAccessToken.user) throw new Error('User relation is not defined')
+
+    request.user = personalAccessToken.user
+
     return true
   }
 }

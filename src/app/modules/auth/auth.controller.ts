@@ -3,6 +3,7 @@ import { PersonalAccessTokenService } from "@/app/domain/system/personal-access-
 import type { User } from "@/app/domain/system/user/entities/user.entity"
 import cryptoHelper from "@/app/helpers/crypto.helper"
 import randomStringHelper from "@/app/helpers/randomString.helper"
+import { Public } from "@/decorators/auth.decorator"
 import { Controller, Post, Req, UseGuards } from "@nestjs/common"
 import dayjs from "dayjs"
 import type { Request } from "express"
@@ -13,6 +14,7 @@ export class AuthController {
     private readonly personalAccessTokenService: PersonalAccessTokenService
   ) { }
 
+  @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Req() req: Request) {

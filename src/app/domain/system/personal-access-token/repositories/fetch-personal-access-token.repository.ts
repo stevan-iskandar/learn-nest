@@ -1,7 +1,7 @@
 import { PersonalAccessToken } from "../entities/personal-access-token.entity"
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { EntityNotFoundError, FindOptionsWhere, Repository } from "typeorm"
+import { EntityNotFoundError, FindOptionsRelations, FindOptionsWhere, Repository } from "typeorm"
 
 @Injectable()
 export class FetchPersonalAccessTokenRepository {
@@ -10,9 +10,12 @@ export class FetchPersonalAccessTokenRepository {
     private readonly personalAccessTokenRepository: Repository<PersonalAccessToken>,
   ) { }
 
-  async findById(id: number): Promise<PersonalAccessToken> {
+  async findById(id: number, relations?: FindOptionsRelations<PersonalAccessToken>): Promise<PersonalAccessToken> {
     const where: FindOptionsWhere<PersonalAccessToken> = { id }
-    const result = await this.personalAccessTokenRepository.findOne({ where })
+    const result = await this.personalAccessTokenRepository.findOne({
+      where,
+      relations,
+    })
 
     if (!result) throw new EntityNotFoundError(PersonalAccessToken, where)
 

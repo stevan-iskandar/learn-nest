@@ -1,7 +1,8 @@
+import { User } from "../../user/entities/user.entity"
 import { idColumn, WithId } from "@/app/core/entities/id.entity"
 import { timestampColumn, WithTimestamp } from "@/app/core/entities/timestamp.entity"
 import { Expose } from "class-transformer"
-import { Column, Entity } from "typeorm"
+import { Column, Entity, ManyToOne } from "typeorm"
 
 export const personalAccessTokenTable = 'personal_access_tokens'
 export const personalAccessTokenColumn = {
@@ -20,6 +21,10 @@ export class PersonalAccessToken extends WithTimestamp(WithId()) {
   @Expose()
   @Column()
   user_id: number
+
+  @Expose()
+  @ManyToOne(() => User)
+  user?: User
 
   @Expose()
   @Column()

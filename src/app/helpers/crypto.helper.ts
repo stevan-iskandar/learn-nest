@@ -6,6 +6,6 @@ export default {
     return crypto.createHash('sha256').update(`${data}_${env.dbDatabase}`).digest('hex')
   },
   verify(data: string, signature: string) {
-    return this.sign(`${data}_${env.dbDatabase}`) === signature
+    return this.sign(data) === signature
   },
 }

@@ -48,13 +48,13 @@ export class CreateUserTable1760667945502 implements MigrationInterface {
                 },
                 {
                     name: userColumn.created_by_id,
-                    type: columnType.boolean,
+                    type: columnType.bigInt,
                     isNullable: true,
                     unsigned: true,
                 },
                 {
                     name: userColumn.updated_by_id,
-                    type: columnType.boolean,
+                    type: columnType.bigInt,
                     isNullable: true,
                     unsigned: true,
                 },
