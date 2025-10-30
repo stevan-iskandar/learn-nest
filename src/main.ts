@@ -4,20 +4,12 @@ import { AppModule } from "./app/modules/app.module"
 import databaseSourceConfig from "./config/database-source.config"
 import { AppValidationPipe } from "./config/pipe/app-validation.pipe"
 import env from "./constants/env"
+import { grpcOptions } from "./grpc/grpc.option"
 import { ClassSerializerInterceptor } from "@nestjs/common"
 import { NestFactory, Reflector } from "@nestjs/core"
-import { MicroserviceOptions, Transport } from "@nestjs/microservices"
-import path from "path"
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.GRPC,
-    options: {
-      package: 'hero',
-      protoPath: path.join(__dirname, 'grpc/hero/hero.proto'),
-      url: `0.0.0.0:${env.appHostPort}`,
-    },
-  })
+  const app = await NestFactory.create(AppModule)
 
   await databaseSourceConfig.initialize()
   app.useGlobalInterceptors(new ContextInterceptor)
@@ -25,6 +17,10 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
   app.useGlobalPipes(new AppValidationPipe)
 
-  await app.listen()
+  app.connectMicroservice(grpcOptions)
+
+  app.startAllMicroservices()
+
+  await app.listen(env.appHostPort)
 }
 bootstrap()

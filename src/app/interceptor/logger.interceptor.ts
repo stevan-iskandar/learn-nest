@@ -8,16 +8,16 @@ export class LoggerInterceptor implements NestInterceptor {
     const handler = context.getHandler().name
     const startTime = Date.now()
 
-    console.log(`gRPC Call: ${handler}`, {
-      data: rpcContext.getData(),
-      metadata: rpcContext.getContext()
-    })
+    // console.log(`gRPC Call: ${handler}`, {
+    //   data: rpcContext.getData(),
+    //   metadata: rpcContext.getContext()
+    // })
 
     return next.handle().pipe(tap(data => {
       const duration = Date.now() - startTime
       console.log(`gRPC Response: ${handler}`, {
         duration: `${duration}ms`,
-        response: data
+        response: data,
       })
     }))
   }

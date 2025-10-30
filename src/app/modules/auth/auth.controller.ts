@@ -4,15 +4,33 @@ import type { User } from "@/app/domain/system/user/entities/user.entity"
 import cryptoHelper from "@/app/helpers/crypto.helper"
 import randomStringHelper from "@/app/helpers/randomString.helper"
 import { Public } from "@/decorators/auth.decorator"
-import { Controller, Post, Req, UseGuards } from "@nestjs/common"
+import { HeroService } from "@/grpc/hero/hero.interface"
+import { Controller, Get, Inject, OnModuleInit, Post, Req, UseGuards } from "@nestjs/common"
+import type { ClientGrpc } from "@nestjs/microservices"
 import dayjs from "dayjs"
 import type { Request } from "express"
 
 @Controller()
-export class AuthController {
+export class AuthController implements OnModuleInit {
+  private heroService: HeroService
+
   constructor(
+    @Inject('HERO_PACKAGE')
+    private readonly client: ClientGrpc,
     private readonly personalAccessTokenService: PersonalAccessTokenService
   ) { }
+
+  onModuleInit() {
+    this.heroService = this.client.getService<HeroService>('HeroService')
+  }
+
+  @Public()
+  @Get('test')
+  test() {
+    const hero = this.heroService.findOne({ id: 1 })
+    console.log(hero)
+    return hero
+  }
 
   @Public()
   @UseGuards(LocalAuthGuard)
