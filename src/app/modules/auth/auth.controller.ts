@@ -4,6 +4,7 @@ import type { User } from "@/app/domain/system/user/entities/user.entity"
 import cryptoHelper from "@/app/helpers/crypto.helper"
 import randomStringHelper from "@/app/helpers/randomString.helper"
 import { Public } from "@/decorators/auth.decorator"
+import { heroService } from "@/grpc/hero/hero.constant"
 import { HeroService } from "@/grpc/hero/hero.interface"
 import { Controller, Get, Inject, OnModuleInit, Post, Req, UseGuards } from "@nestjs/common"
 import type { ClientGrpc } from "@nestjs/microservices"
@@ -21,7 +22,7 @@ export class AuthController implements OnModuleInit {
   ) { }
 
   onModuleInit() {
-    this.heroService = this.client.getService<HeroService>('HeroService')
+    this.heroService = this.client.getService<HeroService>(heroService)
   }
 
   @Public()

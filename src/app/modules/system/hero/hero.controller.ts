@@ -1,13 +1,14 @@
 import { Public } from "@/decorators/auth.decorator"
+import { heroMethod, heroService } from "@/grpc/hero/hero.constant"
 import type { Hero, HeroById } from "@/grpc/hero/hero.interface"
 import { Metadata, type ServerUnaryCall } from "@grpc/grpc-js"
-import { Controller, Get, Param, Query } from "@nestjs/common"
+import { Controller, Get, Query } from "@nestjs/common"
 import { GrpcMethod } from "@nestjs/microservices"
 
 @Controller()
 export class HeroController {
   @Public()
-  @GrpcMethod('HeroService', 'FindOne')
+  @GrpcMethod(heroService, heroMethod.findOne)
   @Get('find')
   findOne(@Query() data: HeroById, metadata: Metadata, call: ServerUnaryCall<any, any>): Hero | undefined {
     const items: Hero[] = [
